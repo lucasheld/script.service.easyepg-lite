@@ -109,6 +109,7 @@ class Grabber():
                         start_dt = f'{datetime.now().strftime("%Y%m%d")}'
                 sleep(1)
 
+    @tools.rate_limited(2)
     def load_airings(self, channel):
         if self.cancellation or self.exit:
             return

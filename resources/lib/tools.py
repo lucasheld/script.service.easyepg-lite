@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-import json, os, requests
+import json, os, requests, time, threading
 
 
 general_header = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36'}
@@ -139,6 +139,26 @@ class API():
                 "message": s.headers.get("X-Mashery-Error-Code", str(s.status_code))})
         except:
             return json.dumps({"success": False, "message": "Connection error."})
+
+
+# https://stackoverflow.com/a/667706
+def rate_limited(max_per_second):
+    lock = threading.Lock()
+    min_interval = 1.0 / float(max_per_second)
+    def decorate(func):
+        last_time_called = [0.0]
+        def rate_limited_function(*args, **kargs):
+            lock.acquire()
+            elapsed = time.process_time() - last_time_called[0]
+            left_to_wait = min_interval - elapsed
+            if left_to_wait > 0:
+                time.sleep(left_to_wait)
+            lock.release()
+            ret = func(*args, **kargs)
+            last_time_called[0] = time.process_time()
+            return ret
+        return rate_limited_function
+    return decorate
 
 
 def save_file(file, path):
