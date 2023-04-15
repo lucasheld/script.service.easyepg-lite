@@ -56,6 +56,9 @@ class API():
                         i["station"]["chExists"] = True
                     else:
                         i["station"]["chExists"] = False
+                    image = i["station"].get("preferredImage", {"uri": None})["uri"]
+                    if image:
+                        i["station"]["preferredImage"]["uri"] = f"https://ondemo.tmsimg.com/{image}"
                     if i["station"]["bcastLangs"][0] in (lang.split("-")[0], lang) and value.lower() == i["station"]["name"].lower():
                         a.insert(0, i)
                     else:
@@ -75,6 +78,9 @@ class API():
                     i[0]["chExists"] = True
                 else:
                     i[0]["chExists"] = False
+                image = i[0].get("preferredImage", {"uri": None})["uri"]
+                if image:
+                    i[0]["preferredImage"]["uri"] = f"https://ondemo.tmsimg.com/{image}"
                 return json.dumps({"success": True, "result": i})
         
         url = f"https://data.tmsapi.com/v1.1/stations/{value}?imageSize=Md" \
@@ -93,6 +99,9 @@ class API():
                         r[n]["chExists"] = True
                     else:
                         r[n]["chExists"] = False
+                    image = i.get("preferredImage", {"uri": None})["uri"]
+                    if image:
+                        r[n]["preferredImage"]["uri"] = f"https://ondemo.tmsimg.com/{image}"
                 return json.dumps({"success": True, "result": r})
         except (json.JSONDecodeError, requests.HTTPError):
             return json.dumps({"success": False, 
@@ -133,6 +142,9 @@ class API():
                         r[n]["chExists"] = True
                     else:
                         r[n]["chExists"] = False
+                    image = i.get("preferredImage", {"uri": None})["uri"]
+                    if image:
+                        r[n]["preferredImage"]["uri"] = f"https://ondemo.tmsimg.com/{image}"
                 return json.dumps({"success": True, "result": {i["stationId"]: i for i in r}})
         except (json.JSONDecodeError, requests.HTTPError):
             return json.dumps({"success": False, 
