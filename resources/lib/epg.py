@@ -234,7 +234,7 @@ class Grabber():
 
                             # ICON
                             if image is not None and image != "":
-                                program["icon"] = {"@src": image}
+                                program["icon"] = {"@src": f"https://ondemo.tmsimg.com/{image}"}
 
                             # TITLE
                             if title is not None and title != "":
